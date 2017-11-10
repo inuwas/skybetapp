@@ -19,6 +19,7 @@ Routes http://localhost/tcp
 * Created an app that connects the provider service on the exposed TCP port
 * Transformed the proprietary data format into JSON using the field names and data types defined in the provider /types endpoint
 * Wrote unit tests $ yarn test
+* Created MongoDb schema
 
 ## License
 
