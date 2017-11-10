@@ -8,9 +8,9 @@ const test = require('tape');
 const request = require('supertest');
 const { app } = require('../server');
 
-test('Home page', t => {
+test('tcp page', t => {
   request(app)
-    .get('/')
+    .get('/tcp')
     .expect(200)
     .end(t.end);
 });

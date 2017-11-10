@@ -5,21 +5,20 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/madhums/node-express-mongoose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Gittip](https://img.shields.io/gratipay/madhums.svg?style=flat)](https://www.gratipay.com/madhums/)
 
-## Node Express Mongoose
-
-A boilerplate application for building web apps using express, mongoose and passport.
-
-Read the [wiki](https://github.com/madhums/node-express-mongoose/wiki) to understand how the application is structured.
-
+## SkyBET App Solution
+Routes http://localhost/tcp
 ## Usage
 
-    $ git clone https://github.com/madhums/node-express-mongoose.git
-    $ cd node-express-mongoose
-    $ npm install
-    $ cp .env.example .env
-    $ npm start
+    $ git clone https://github.com/inuwas/skybetapp
+    $ cd skybetapp
+    $ yarn install
+    $ yarn start
 
-Checkout the [apps that are built using this approach](https://github.com/madhums/node-express-mongoose/wiki/Apps-built-using-this-approach)
+## Tasks Executed
+
+* Created an app that connects the provider service on the exposed TCP port
+* Transformed the proprietary data format into JSON using the field names and data types defined in the provider /types endpoint
+* Wrote unit tests $ yarn test
 
 ## License
 
