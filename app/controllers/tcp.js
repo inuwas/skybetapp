@@ -25,12 +25,16 @@ var connectToServer = (res) => {
     client.end();
   });
 
+  // Once data has been collected save it mongodb database
   client.on('end', () => {
     let TcpDataArray = convertJSON(completeData);
-    let curentData = new TcpData({ TcpDataArray });
     
+    let curentData = new TcpData(TcpDataArray[0] );
+    
+    // Save data to mongodb
     curentData.save(); 
     
+    // Responds with JSON data
     res.json({ message: TcpDataArray });
   });
   
@@ -38,6 +42,7 @@ var connectToServer = (res) => {
     console.log('Connection closed');
   });
 };
+
 /**
  * Converts Packet Response to JSON Format
  * @param {*} data 
@@ -48,17 +53,12 @@ var convertJSON = (data) => {
   var arrayOfJsonObjects = [];
   splitOnNewLineArray.forEach((elementString, index) => {
 
-    // elementString.replace('\|','');
-    // let replacedString = elementString.replace(String.fromCharCode(92).concat(String.fromCharCode(124)),'');
-    // let replacedString = elementString.replace(/\\(\|)/gi, '');
-    // let element = elementString.replace(/\\(\|)/gi, '').split('|');
     let replElement = S(elementString).strip('\\').s;
-    console.log('*****' + elementString);
-    console.log(replElement);
     let element = replElement.split('|');
+
     element.shift();
     let typeObject = {};
-    
+    console.log('Index is: ' + index);
     // Split items with pipes
     if ( (index % 3) == 0 ) {
       let event = {};
@@ -126,6 +126,9 @@ var convertJSON = (data) => {
     if (((index % 3 ) == 0) && index > 1 ) {
       arrayOfJsonObjects.push(typeObject);
     }
+  });
+  arrayOfJsonObjects.map((jsonObject) => {
+    console.log(JSON.stringify(jsonObject));
   });
   return arrayOfJsonObjects; 
 };
