@@ -15,4 +15,17 @@ test('tcp page', t => {
     .end(t.end);
 });
 
+test('Response Data', () => {
+  request(app)
+  .get('/tcp')
+  .expect('Content-Type', /json/)
+  .expect(200)
+  .end((err) => {
+    if (err) {
+      throw err;
+    }
+  });
+});
+
+
 test.onFinish(() => process.exit(0));

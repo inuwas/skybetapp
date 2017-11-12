@@ -1,34 +1,37 @@
 var net = require('net');
-var Promise = require('bluebird');
-var tcpDataModel = require('../models/tcp');
+var TcpData = require('../models/tcp');
+var S = require('string');
 /**
  * Connects TCP service and saves data to mongodb
  * @param {*} res 
  */
 var connectToServer = (res) => {
-  var client = new net.Socket();
-  client.connect(8181, '127.0.0.1', () => {
-    console.log('Connected');
-    client.write('Hello, server! Love, Client.');
+  // var client = new net.Socket();
+  var completeData = '';
+  let client = net.createConnection({ port: 8282 }, () => {
+
+    client.write('Test Worked!\r\n');
   });
   
+  
   client.on('data', (data) => {
-    console.log('Received: ' + data);
+    // change buffer to string
+    let readData = data.toString();
 
-    Promise.resolve(data).then(function () {
-      /* Return The Array of Objects Converted from | delimited
-       to JSON */
-      let TcpDataArray = convertJSON(data);
-      let curentData = new tcpDataModel;
-      TcpDataArray.map((tcpData) => {
-        curentData.push(tcpData);
-      });
-      curentData.save();      
-      return res.json(TcpDataArray);
-    }).then(() => {
-      // kill client after server's response
-      client.destroy();
-    });
+    // Merge response data as one string
+    completeData += readData += '\n';
+
+    // End client after server's final response
+    client.end();
+  });
+
+  client.on('end', () => {
+    let TcpDataArray = convertJSON(completeData);
+    let curentData = new TcpData({ TcpDataArray });
+    
+    curentData.save(); 
+    
+    res.json({ message: TcpDataArray });
   });
   
   client.on('close', () => {
@@ -45,8 +48,15 @@ var convertJSON = (data) => {
   var arrayOfJsonObjects = [];
   splitOnNewLineArray.forEach((elementString, index) => {
 
-    elementString.replace('\|','');
-    let element = elementString.split('|');
+    // elementString.replace('\|','');
+    // let replacedString = elementString.replace(String.fromCharCode(92).concat(String.fromCharCode(124)),'');
+    // let replacedString = elementString.replace(/\\(\|)/gi, '');
+    // let element = elementString.replace(/\\(\|)/gi, '').split('|');
+    let replElement = S(elementString).strip('\\').s;
+    console.log('*****' + elementString);
+    console.log(replElement);
+    let element = replElement.split('|');
+    element.shift();
     let typeObject = {};
     
     // Split items with pipes
@@ -117,7 +127,6 @@ var convertJSON = (data) => {
       arrayOfJsonObjects.push(typeObject);
     }
   });
-  console.log(arrayOfJsonObjects);
   return arrayOfJsonObjects; 
 };
 
