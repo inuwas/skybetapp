@@ -12,6 +12,7 @@ Routes http://localhost/tcp
     $ git clone https://github.com/inuwas/skybetapp
     $ cd skybetapp
     $ yarn install
+    $ docker-compose up
     $ yarn start
 
 ## Tasks Executed
